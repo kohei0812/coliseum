@@ -23,7 +23,7 @@
             <tr>
                 <td>{{ event.date|date:"Y年m月d日" }}</td>
                 <td>{{ event.title }}</td>
-                <td>{{ event.performers }}</td>
+                <td>{{ event.performers|linebreaks }}</td>
                 <td>{{ event.content|linebreaks }}</td>
                 <td>
                     {% if event.image %}
