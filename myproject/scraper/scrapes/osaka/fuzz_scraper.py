@@ -29,7 +29,13 @@ def save_image(image_url, event_title, max_length=50):
     return None, None
 
 def fuzz_scraper():
-    current_year = datetime.now().year
+    now = datetime.now()
+    if now.month == 12:
+        # If it's December, use next year's schedule
+        current_year = now.year + 1
+    else:
+        current_year = now.year
+
     url = f"https://fuzz-mikunigaoka.com/{current_year}-schedule/"
 
     # Fetch the HTML page
@@ -55,8 +61,9 @@ def fuzz_scraper():
         label_span = post.find("span", class_="ark-block-accordion__label")
         if label_span:
             lines = label_span.get_text(separator="\n").splitlines()
-            title = lines[0].strip() if len(lines) > 0 else "No Title"
-            performers = lines[1].strip() if len(lines) > 1 else "No Performers"
+            # Remove any content before '|' in the title
+            title = lines[0].strip().split('|')[-1].strip() if len(lines) > 0 else "No Title"
+            performers = lines[1].strip() if len(lines) > 1 else "and more..."
         else:
             title, performers = "No Title", "and more..."
 

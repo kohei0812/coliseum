@@ -78,3 +78,50 @@ class Mele(models.Model):
     
     def __str__(self):
         return self.title
+    
+def get_image_upload_socore(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/socore/{filename}"
+
+class Socore(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to=get_image_upload_socore, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+def get_image_upload_tora(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/tora/{filename}"
+
+class Tora(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    image = models.ImageField(upload_to=get_image_upload_tora, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+def get_image_upload_hokage(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/hokage/{filename}"
+
+class Hokage(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to=get_image_upload_hokage, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title

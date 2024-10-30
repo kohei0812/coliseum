@@ -33,7 +33,14 @@ def save_image(image_url, event_title):
     return None, None
 
 def mele_scraper():
-    next_month = datetime.now().replace(day=1).replace(month=(datetime.now().month % 12) + 1)
+    now = datetime.now()
+    if now.month == 12:
+        # If it's December, set the next month to January of the next year
+        next_month = datetime(now.year + 1, 1, 1)
+    else:
+        # Otherwise, get the next month in the current year
+        next_month = now.replace(day=1, month=(now.month % 12) + 1)
+
     url = f"https://namba-mele.com/schedule/{next_month.strftime('%Y%m')}.html"
 
     response = requests.get(url)
@@ -64,16 +71,11 @@ def mele_scraper():
 
         # Extract additional details like open/start times
         details = event_section.find("p", class_="date")
-        content = details.get_text(separator="\n", strip=True) if details else "No Details"
+        content = details.get_text(separator="\n",strip=True) if details else "No Details"
 
-        # Extract performers while preserving line breaks
+        # Extract performers
         performers_section = event_section.find("p", class_="text")
-        if performers_section:
-            # Manually join the text of each child element, preserving line breaks
-            performers = "\n".join([line.get_text(strip=True) for line in performers_section.find_all(text=True)])
-            performers = performers.strip() or "No Performers"
-        else:
-            performers = "No Performers"
+        performers = performers_section.get_text(separator="\n", strip=True) if performers_section else "No Performers"
 
         # Extract image
         image_div = event_section.find("div", class_="mb5")
@@ -107,4 +109,4 @@ def mele_scraper():
             print(f"Error saving event '{title}': {e}")
 
 # Call the scraper
-# mele_scraper()
+# namba_mele_scraper()
