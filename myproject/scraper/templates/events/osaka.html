@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        {{ my_form.as_p }}
+        <input type="submit" value="選択">
+    </form>
+    <p>{{date}}</p>
+    <ul class="event-list">
+        {% if anarky_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">アナーキー</h2>
+            <ul class="event-list_body">
+            {% for anarky_event in anarky_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{anarky_event.title}}</div>
+            <div class="event-list-performers">{{anarky_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{anarky_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if anarky_event.image %}
+                <img src="{{ anarky_event.image.url }}" alt="{{ anarky_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if stomp_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">Club Stomp</h2>
+            <ul class="event-list_body">
+            {% for stomp_event in stomp_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{stomp_event.title}}</div>
+            <div class="event-list-performers">{{stomp_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{stomp_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if stomp_event.image %}
+                <img src="{{ stomp_event.image.url }}" alt="{{ stomp_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if sengoku_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">戦国大統領</h2>
+            <a href="https://sengokudaitouryou.com/" target="_blank">https://sengokudaitouryou.com/</a>
+            <ul class="event-list_body">
+            {% for sengoku_event in sengoku_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{sengoku_event.title}}</div>
+            <div class="event-list-performers">{{sengoku_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{sengoku_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if sengoku_event.image %}
+                <img src="{{ sengoku_event.image.url }}" alt="{{ sengoku_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if tora_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">尼崎tora</h2>
+            <a href="https://live-tora.com/" target="_blank">https://live-tora.com/</a>
+            <ul class="event-list_body">
+            {% for tora_event in tora_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{tora_event.title}}</div>
+            <div class="event-list-performers">{{tora_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{tora_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if tora_event.image %}
+                <img src="{{ tora_event.image.url }}" alt="{{ tora_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if fandango_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">FANDANGO</h2>
+            <a href="https://www.fandango-japan.com/" target="_blank">https://www.fandango-japan.com/</a>
+            <ul class="event-list_body">
+            {% for fandango_event in fandango_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{fandango_event.title}}</div>
+            <div class="event-list-performers">{{fandango_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{fandango_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if fandango_event.image %}
+                <img src="{{ fandango_event.image.url }}" alt="{{ fandango_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if king_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">KING COBRA</h2>
+            <a href="http://king-cobra.net/" target="_blank">http://king-cobra.net/</a>
+            <ul class="event-list_body">
+            {% for king_event in king_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{king_event.title}}</div>
+            <div class="event-list-performers">{{king_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{king_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if king_event.image %}
+                <img src="{{ king_event.image.url }}" alt="{{ king_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if hokage_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">火影</h2>
+            <a href="http://musicbarhokage.net/" target="_blank">http://musicbarhokage.net/</a>
+            <ul class="event-list_body">
+            {% for hokage_event in hokage_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{hokage_event.title}}</div>
+            <div class="event-list-performers">{{hokage_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{hokage_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if hokage_event.image %}
+                <img src="{{ hokage_event.image.url }}" alt="{{ hokage_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if mele_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">NAMBA MELE</h2>
+            <a href="https://namba-mele.com/" target="_blank">https://namba-mele.com/</a>
+            <ul class="event-list_body">
+            {% for mele_event in mele_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{mele_event.title}}</div>
+            <div class="event-list-performers">{{mele_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{mele_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if mele_event.image %}
+                <img src="{{ mele_event.image.url }}" alt="{{ mele_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if helluva_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">HELLUVA LOUNGE</h2>
+            <a href="https://helluva.jp/" target="_blank">https://helluva.jp/</a>
+            <ul class="event-list_body">
+            {% for helluva_event in helluva_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{helluva_event.title}}</div>
+            <div class="event-list-performers">{{helluva_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{helluva_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if helluva_event.image %}
+                <img src="{{ helluva_event.image.url }}" alt="{{ helluva_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if socore_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">SOCORE FACTORY</h2>
+            <a href="https://socorefactory.com/" target="_blank">https://socorefactory.com/</a>
+            <ul class="event-list_body">
+            {% for socore_event in socore_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{socore_event.title}}</div>
+            <div class="event-list-performers">{{socore_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{socore_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if socore_event.image %}
+                <img src="{{ socore_event.image.url }}" alt="{{ socore_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if fuzz_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">三国ヶ丘 FUZZ</h2>
+            <a href="https://fuzz-mikunigaoka.com/" target="_blank">https://fuzz-mikunigaoka.com/</a>
+            <ul class="event-list_body">
+            {% for fuzz_event in fuzz_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{fuzz_event.title}}</div>
+            <div class="event-list-performers">{{fuzz_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{fuzz_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if fuzz_event.image %}
+                <img src="{{ fuzz_event.image.url }}" alt="{{ fuzz_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if bears_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">Namba BEARS</h2>
+            <a href="https://namba-bears.main.jp/" target="_blank">https://namba-bears.main.jp/</a>
+            <ul class="event-list_body">
+            {% for bears_event in bears_events %}
+            <li class="event-list_child">
+            <div class="event-list-ttl">{{bears_event.title}}</div>
+            <div class="event-list-performers">{{bears_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{bears_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if bears_event.image %}
+                <img src="{{ bears_event.image.url }}" alt="{{ bears_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+       
+    </ul>
+</body>
+</html>

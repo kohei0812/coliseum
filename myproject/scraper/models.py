@@ -11,8 +11,8 @@ class Bears(models.Model):
     date = models.DateField()
     title = models.CharField(max_length=255)
     content = models.TextField()
-    image = models.ImageField(upload_to=get_image_upload_bears, blank=True, null=True)
     performers = models.TextField(blank=True, null=True) 
+    image = models.ImageField(upload_to=get_image_upload_bears, blank=True, null=True)
     
     def __str__(self):
         return self.title
@@ -57,8 +57,8 @@ class Fuzz(models.Model):
     date = models.DateField()
     title = models.CharField(max_length=255)
     content = models.TextField()
-    performers = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=get_image_upload_fuzz, blank=True, null=True)
+    performers = models.TextField(blank=True, null=True)
     
     def __str__(self):
         return self.title
@@ -122,6 +122,70 @@ class Hokage(models.Model):
     content = models.TextField()
     performers = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=get_image_upload_hokage, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+def get_image_upload_king(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/king/{filename}"
+
+class King(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to=get_image_upload_king, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+def get_image_upload_fandango(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/fandango/{filename}"
+
+class Fandango(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to=get_image_upload_fandango, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+def get_image_upload_anarky(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/anarky/{filename}"
+
+class Anarky(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to=get_image_upload_anarky, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+def get_image_upload_stomp(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/stomp/{filename}"
+
+class Stomp(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to=get_image_upload_stomp, blank=True, null=True)
     
     def __str__(self):
         return self.title
