@@ -51,7 +51,18 @@ def tora_scraper():
                 continue  # Skip event if date is not valid
 
             # Extract title (removing the date part)
-            title = date_text.split('［')[1].split('］')[0].strip()  # Extract title from brackets
+            title = None
+
+            # Check if the date_text contains the brackets
+            if '［' in date_text and '］' in date_text:
+                try:
+                    title = date_text.split('［')[1].split('］')[0].strip()  # Extract title from brackets
+                except IndexError:
+                    print(f"Error extracting title from {date_text}: brackets format incorrect")
+                    continue  # Skip event if title extraction fails
+            else:
+                # Handle cases where brackets are not found, or use a fallback method
+                title = date_text.strip()
 
             # Extract content from getPostContent
             content_div = post.find("div", class_="getPostContent")

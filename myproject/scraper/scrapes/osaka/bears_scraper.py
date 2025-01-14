@@ -48,6 +48,13 @@ def bears_scraper():
         # コンテンツ情報を取得
         content = table.find('td', width="610").get_text(separator="\n", strip=True)
 
+        # Remove the first line of the content
+        content_lines = content.split("\n")
+        if len(content_lines) > 1:
+            content = "\n".join(content_lines[1:])
+        else:
+            content = "No content available"
+
         # 画像の取得
         image_tag = table.find('img')
         image_url = image_tag['src'] if image_tag else None
@@ -67,7 +74,7 @@ def bears_scraper():
             defaults={
                 'title': title,
                 'content': content,
-                'performers': performers_text,
+                # 'performers': performers_text,
             }
         )
 

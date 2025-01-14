@@ -1,0 +1,124 @@
+{% load static %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="description" content="Rock'n'Roll Colisuemは全国のライブ情報を一覧で提供するサイトです。" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@otherguy0721" />
+    <meta name="twitter:title" content="Rock'n'Roll Colisuem" />
+    <meta name="twitter:description" content="Rock'n'Roll Colisuemは全国のライブ情報を一覧で提供するサイトです。" />
+    <meta name="twitter:image" content="{% static 'img/osaka.jpg' %}" />
+    <title>{% block title %}Rock'n'Roll Colisuem{% endblock %}</title>
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="https://use.typekit.net/hym7zva.css" />
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+
+    <!-- CSSの読み込み -->
+  </head>
+  <body>
+    <!-- <div class="sp-nav_wrapper">
+      <nav class="sp-nav sp_only">
+        <ul>
+          <li><a href="/">関西</a></li>
+        </ul>
+      </nav>
+    </div> -->
+    <form action="{% url 'set_language' %}" method="post" class="chlang">
+      {% csrf_token %}
+      <select name="language">
+          <option value="en">English</option>
+          <option value="ja">日本語</option>
+      </select>
+      <button type="submit">{% trans "Change Language" %}</button>
+  </form>
+    <button class="hamburger-menu sp_only" id="js-hamburger-menu">
+      <span class="hamburger-menu__bar"></span>
+      <span class="hamburger-menu__bar"></span>
+      <span class="hamburger-menu__bar"></span>
+    </button>
+    <!-- ヘッダー部分 -->
+    <header>
+      <div class="header-inner container">
+        <div class="logo">
+          <h1>
+            <!-- ロックンロールコロシアム -->
+            {% trans "Rock'n'Roll Coliseum" %}
+            <span>
+              <!-- 全国のライブ情報一覧サイト -->
+              {% trans "Web Site for Lists of Gigs in Japan" %}
+            </span>
+          </h1>
+        </div>
+        <nav class="pc_only">
+          <ul>
+            <li><a href="/">
+              <!-- 関西 -->
+              {% trans "Kansai" %}
+            </a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <!-- コンテンツ部分 -->
+    <main>
+      {% block fistview %} {% endblock %} {% block content %} {% endblock %}
+      <div class="notice container">
+        <h2 class="notice_ttl">
+          <!-- サイトご利用上の注意 -->
+          {% trans "Notes on using the site" %}
+        </h2>
+        <ul class="notice_list">
+          <li class="notice_list-item">
+            <!-- ライブハウス全ては載せていません。選定は独断によります。 -->
+            {% trans "Not all live houses are listed. Selection is based on discretion." %}
+          </li>
+          <li class="notice_list-item">
+            <!-- 月次で自動的にライブ情報を取得しているため、実際の興行と異なる場合や記載の不備がある可能性があります。 -->
+            {% trans "Since live information is automatically obtained monthly, it may differ from the actual performance or there may be errors in the information." %}
+          </li>
+          <li class="notice_list-item">
+            <!-- ライブ情報は各ライブハウスのホームページ又はSNSから取得しています。 -->
+            {% trans "Live information is obtained from each live house's homepage or SNS." %}
+          </li>
+          <li class="notice_list-item">
+            <!-- 各ライブに関する予約・お問い合わせは一切受け付けておりません。 -->
+            {% trans "We do not accept any reservations or inquiries regarding each live performance." %}
+          </li>
+          <li class="notice_list-item">
+            <!-- 情報の抜けや誤り、更新頻度などの運営についての苦情は一切受け付けません。 -->
+            {% trans "We will not accept any complaints regarding the management of the site, such as omissions or errors in information, or the frequency of updates." %}
+          </li>
+        </ul>
+      </div>
+      <div class="sns container">
+        <a class="sns-here" href="https://x.com/otherguy0721">
+          <!-- お問い合わせはコチラ -->
+          {% trans "Click here for inquiries" %}
+          <img src="{% static 'img/x.png' %}" alt="Xアイコン" />
+        </a>
+      </div>
+    </main>
+
+    <!-- フッター部分 -->
+    <footer>
+      <p>&copy;Rock'n'Roll Colisuem All Rights Reserved.</p>
+    </footer>
+    <!-- トップへ戻る -->
+    <span id="toTop">↑</span>
+    <script src="{% static 'js/scripts.js' %}"></script>
+  </body>
+</html>

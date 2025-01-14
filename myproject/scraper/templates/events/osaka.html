@@ -1,25 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form method="POST">
-        {% csrf_token %}
-        {{ my_form.as_p }}
-        <input type="submit" value="選択">
-    </form>
-    <p>{{date}}</p>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Osaka - Rock'n'Roll Coliseum{% endblock %}
+{% block fistview %}
+{% load i18n %}
+
+<div class="hero">
+    <img src="{% static 'img/osaka.jpg' %}" alt="そうだ、ライブ行こう">
+</div>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="livehouse">
+        <h2 class="livehouse_ttl">
+            <!-- 掲載している関西のライブハウス一覧 -->
+            {% trans "Venue List" %}
+        </h2>
+        <ul class="livehouse_list">
+            <li class="livehouse_list-item">
+                Helluva Lounge
+            </li>
+            <li class="livehouse_list-item">
+               King Cobra
+            </li>
+            <li class="livehouse_list-item">
+                Fuzz
+            </li>
+            <li class="livehouse_list-item">
+                Fandango
+            </li>
+            <li class="livehouse_list-item">
+               Mele
+            </li>
+            <li class="livehouse_list-item">
+                Socore Factory
+            </li>
+            <li class="livehouse_list-item">
+                Bears
+            </li>
+            <li class="livehouse_list-item">
+                Tora
+            </li>
+            <li class="livehouse_list-item">
+                <!-- 戦国大統領 -->
+                {% trans "Sengokudaitoryo" %}
+            </li>
+            <li class="livehouse_list-item">
+                <!-- 火影 -->
+                {% trans "Hokage" %}
+            </li>
+            <li class="livehouse_list-item">
+                Anarky
+            </li>
+            <li class="livehouse_list-item">
+                Club Stomp
+            </li>
+        </ul>
+    </div>
+    <div class="form">
+        <h2 class="form_ttl">
+            <!-- 検索したい日程を選んで「検索」をクリック -->
+            {% trans "Choose Date and Click Search" %}
+        </h2>
+        <form method="POST">
+            {% csrf_token %}
+            {{ my_form.as_p }}
+            <input type="submit" value="{% trans 'Search' %}">
+        </form>
+    </div>
+    <h2 class="date">
+        {% if date == '本日' %}
+        {{date}}
+        {% else %}
+        {{ date|date:"Y年n月j日" }}
+        {% endif %}
+    </h2>
     <ul class="event-list">
         {% if anarky_events %}
         <li class="event-list_item">
-            <h2 class="event-list_h2">アナーキー</h2>
+            <h2 class="event-list_h2">Anarky</h2>
             <ul class="event-list_body">
             {% for anarky_event in anarky_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{anarky_event.title}}</div>
+            <h3 class="event-list-ttl">{{anarky_event.title}}</h3>
             <div class="event-list-performers">{{anarky_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{anarky_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -38,7 +100,7 @@
             <ul class="event-list_body">
             {% for stomp_event in stomp_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{stomp_event.title}}</div>
+            <h3 class="event-list-ttl">{{stomp_event.title}}</h3>
             <div class="event-list-performers">{{stomp_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{stomp_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -53,12 +115,15 @@
         {% endif %}
         {% if sengoku_events %}
         <li class="event-list_item">
-            <h2 class="event-list_h2">戦国大統領</h2>
+            <h2 class="event-list_h2">
+                <!-- 戦国大統領 -->
+                {% trans "Sengokudaitoryo" %}
+            </h2>
             <a href="https://sengokudaitouryou.com/" target="_blank">https://sengokudaitouryou.com/</a>
             <ul class="event-list_body">
             {% for sengoku_event in sengoku_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{sengoku_event.title}}</div>
+            <h3 class="event-list-ttl">{{sengoku_event.title}}</h3>
             <div class="event-list-performers">{{sengoku_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{sengoku_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -73,12 +138,15 @@
         {% endif %}
         {% if tora_events %}
         <li class="event-list_item">
-            <h2 class="event-list_h2">尼崎tora</h2>
+            <h2 class="event-list_h2">
+                <!-- 尼崎tora -->
+                {% trans "Amagasaki Tora" %}
+            </h2>
             <a href="https://live-tora.com/" target="_blank">https://live-tora.com/</a>
             <ul class="event-list_body">
             {% for tora_event in tora_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{tora_event.title}}</div>
+            <h3 class="event-list-ttl">{{tora_event.title}}</h3>
             <div class="event-list-performers">{{tora_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{tora_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -98,7 +166,7 @@
             <ul class="event-list_body">
             {% for fandango_event in fandango_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{fandango_event.title}}</div>
+            <h3 class="event-list-ttl">{{fandango_event.title}}</h3>
             <div class="event-list-performers">{{fandango_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{fandango_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -118,7 +186,7 @@
             <ul class="event-list_body">
             {% for king_event in king_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{king_event.title}}</div>
+            <h3 class="event-list-ttl">{{king_event.title}}</h3>
             <div class="event-list-performers">{{king_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{king_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -133,12 +201,15 @@
         {% endif %}
         {% if hokage_events %}
         <li class="event-list_item">
-            <h2 class="event-list_h2">火影</h2>
+            <h2 class="event-list_h2">
+                <!-- 火影 -->
+                {% trans "Hokage" %}
+            </h2>
             <a href="http://musicbarhokage.net/" target="_blank">http://musicbarhokage.net/</a>
             <ul class="event-list_body">
             {% for hokage_event in hokage_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{hokage_event.title}}</div>
+            <h3 class="event-list-ttl">{{hokage_event.title}}</h3>
             <div class="event-list-performers">{{hokage_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{hokage_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -158,7 +229,7 @@
             <ul class="event-list_body">
             {% for mele_event in mele_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{mele_event.title}}</div>
+            <h3 class="event-list-ttl">{{mele_event.title}}</h3>
             <div class="event-list-performers">{{mele_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{mele_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -178,7 +249,7 @@
             <ul class="event-list_body">
             {% for helluva_event in helluva_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{helluva_event.title}}</div>
+            <h3 class="event-list-ttl">{{helluva_event.title}}</h3>
             <div class="event-list-performers">{{helluva_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{helluva_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -198,7 +269,7 @@
             <ul class="event-list_body">
             {% for socore_event in socore_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{socore_event.title}}</div>
+            <h3 class="event-list-ttl">{{socore_event.title}}</h3>
             <div class="event-list-performers">{{socore_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{socore_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -213,12 +284,15 @@
         {% endif %}
         {% if fuzz_events %}
         <li class="event-list_item">
-            <h2 class="event-list_h2">三国ヶ丘 FUZZ</h2>
+            <h2 class="event-list_h2">
+                <!-- 三国ヶ丘 FUZZ -->
+                {% trans "Mikunigaoka FUZZ" %}
+            </h2>
             <a href="https://fuzz-mikunigaoka.com/" target="_blank">https://fuzz-mikunigaoka.com/</a>
             <ul class="event-list_body">
             {% for fuzz_event in fuzz_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{fuzz_event.title}}</div>
+            <h3 class="event-list-ttl">{{fuzz_event.title}}</h3>
             <div class="event-list-performers">{{fuzz_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{fuzz_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
@@ -238,8 +312,8 @@
             <ul class="event-list_body">
             {% for bears_event in bears_events %}
             <li class="event-list_child">
-            <div class="event-list-ttl">{{bears_event.title}}</div>
-            <div class="event-list-performers">{{bears_event.performers |linebreaks}}</div>
+            <h3 class="event-list-ttl">{{bears_event.title}}</h3>
+            <!-- <div class="event-list-performers">{{bears_event.performers |linebreaks}}</div> -->
             <div class="event-list-content">{{bears_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
                 {% if bears_event.image %}
@@ -253,5 +327,5 @@
         {% endif %}
        
     </ul>
-</body>
-</html>
+</div>
+    {% endblock %}
