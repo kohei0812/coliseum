@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponse
 from django.urls import path
-from scraper.views import scrape_view,event_list,IndexView
+from scraper.views import scrape_view,event_list,IndexView,IndexAPIView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls.i18n import i18n_patterns
@@ -13,6 +13,7 @@ urlpatterns = [
     path('scrape/', scrape_view, name='scrape'),
     path('events/', event_list, name='event_list'),
     path('', IndexView.as_view(), name='index'),
+    path('api/index/', IndexAPIView.as_view(), name='index_api'),
 ]
 urlpatterns += i18n_patterns(
     path('set-language/', set_language, name='set_language'),  # 修正ポイント: set_language 関数を直接渡す

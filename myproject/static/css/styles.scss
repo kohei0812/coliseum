@@ -45,7 +45,21 @@ ul {
 img{
     height: auto;
 }
-
+.chlang{
+    display:flex;
+    margin: 10px;
+    select{
+        color: #333 !important;
+        border-radius:0 !important;
+    }
+    button{
+        background-color:hotpink;
+        border: none;
+        color: white;
+        border-radius:0 !important ;
+        cursor: pointer;
+    }
+}
 
     .container{
         max-width: 1140px;

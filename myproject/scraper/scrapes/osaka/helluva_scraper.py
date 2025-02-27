@@ -37,6 +37,7 @@ def sanitize_content(content):
     return "\n".join(soup.stripped_strings)  # 余分な空白を除去してテキストを取得
 
 def helluva_scraper():
+    print("------------helluva start----------------")
     url = "https://helluva.jp/"
     
     # Fetch the HTML page
@@ -112,6 +113,4 @@ def helluva_scraper():
                     print(f"Event '{title}' updated successfully")
             except Exception as e:
                 print(f"Error saving event '{title}': {e}")
-
-# 例として、この関数を実行する場合
-# helluva_scraper()
+    print("------------helluva end----------------")

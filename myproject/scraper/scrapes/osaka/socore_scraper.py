@@ -24,6 +24,7 @@ def save_image(image_url, event_title, max_length=50):
     return None, None
 
 def socore_scraper():
+    print("------------socore start----------------")
     now = datetime.now()
     
     # Determine the target URL based on the current month
@@ -108,7 +109,5 @@ def socore_scraper():
         except Exception as e:
             print(f"Error saving event '{title}': {e}")
 
-    print("Scraping executed")
+    print("------------socore end----------------")
 
-# Call the scraper
-# socore_scraper()

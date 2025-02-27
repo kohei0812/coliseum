@@ -26,6 +26,7 @@ def save_image(image_url, event_title, max_length=50):
     return None, None
 
 def hokage_scraper():
+    print("------------hokage start----------------")
     current_month = datetime.now().month
     current_year = datetime.now().year
     next_month = (current_month % 12) + 1
@@ -134,4 +135,4 @@ def hokage_scraper():
         except Exception as e:
             print(f"Error saving event '{event['title']}': {e}")
 
-    print("Scraping executed")
+    print("------------hokage end----------------")

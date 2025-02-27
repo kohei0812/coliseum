@@ -41,6 +41,7 @@ def download_image_from_url(image_url):
 
 
 def fandango_scraper():
+    print("------------fandango start----------------")
     # 現在の月を取得
     current_month = datetime.now().month
 
@@ -155,3 +156,4 @@ def fandango_scraper():
 
             except Exception as e:
                 logger.error(f"Error saving event '{event['title']}': {e}")
+    print("------------fandango end----------------")

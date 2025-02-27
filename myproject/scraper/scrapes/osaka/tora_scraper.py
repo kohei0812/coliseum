@@ -28,6 +28,7 @@ def save_image(image_url, event_title, max_length=50):
     return None, None
 
 def tora_scraper():
+    print("------------tora start----------------")
     url = "https://live-tora.com/live-schedule-next-month"
     
     # Fetch the HTML page
@@ -103,4 +104,4 @@ def tora_scraper():
             except Exception as e:
                 print(f"Error saving event '{title}': {e}")
 
-    print("Scraping executed")
+    print("------------tora end----------------")

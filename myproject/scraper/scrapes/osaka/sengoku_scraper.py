@@ -29,6 +29,7 @@ def save_image(image_url, event_title):
     return None, None
 
 def sengoku_scraper():
+    print("------------sengoku start----------------")
     url = "https://sengokudaitouryou.com/"
     
     # Fetch the HTML page
@@ -87,3 +88,4 @@ def sengoku_scraper():
         except Exception as e:
             print(f"Error saving event '{title}': {e}")
 
+    print("------------sengoku end----------------")

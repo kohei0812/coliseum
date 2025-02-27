@@ -29,6 +29,7 @@ def save_image(image_url, event_title, max_length=50):
     return None, None
 
 def fuzz_scraper():
+    print("------------fuzz start----------------")
     now = datetime.now()
     if now.month == 12:
         # If it's December, use next year's schedule
@@ -105,4 +106,4 @@ def fuzz_scraper():
         except Exception as e:
             print(f"Error saving event '{title}': {e}")
 
-    print("Scraping executed")
+    print("------------fuzz end----------------")

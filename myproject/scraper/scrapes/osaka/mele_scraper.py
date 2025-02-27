@@ -33,6 +33,7 @@ def save_image(image_url, event_title):
     return None, None
 
 def mele_scraper():
+    print("------------mele start----------------")
     now = datetime.now()
     if now.month == 12:
         # If it's December, set the next month to January of the next year
@@ -108,5 +109,4 @@ def mele_scraper():
         except Exception as e:
             print(f"Error saving event '{title}': {e}")
 
-# Call the scraper
-# namba_mele_scraper()
+    print("------------mele end----------------")

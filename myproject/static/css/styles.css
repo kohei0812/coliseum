@@ -84,6 +84,22 @@ img {
   height: auto;
 }
 
+.chlang {
+  display: flex;
+  margin: 10px;
+}
+.chlang select {
+  color: #333 !important;
+  border-radius: 0 !important;
+}
+.chlang button {
+  background-color: hotpink;
+  border: none;
+  color: white;
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+
 .container {
   max-width: 1140px;
   margin: 0 auto;

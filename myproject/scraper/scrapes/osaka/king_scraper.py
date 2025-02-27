@@ -68,6 +68,7 @@ def scrape_main_page():
         print(event)  # Replace this with your database save logic
 
 def king_scraper():
+    print("------------king start----------------")
     year, month, url = generate_url()
     try:
         response = requests.get(url)
@@ -124,7 +125,4 @@ def king_scraper():
     except Exception as outer_exception:
         print(f"Failed to scrape data from {url}: {outer_exception}")
 
-# スクリプトの実行
-# if __name__ == "__main__":
-#     scrape_main_page()  # メインページのスクレイピングを実行
-#     king_scraper()      # イベント情報のスクレイピングを実行
+    print("------------king end----------------")

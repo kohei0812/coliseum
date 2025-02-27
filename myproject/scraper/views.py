@@ -12,6 +12,8 @@ import traceback
 import requests
 from django.http import JsonResponse
 import time
+import json
+
 # LINE Messaging APIに通知を送るための関数
 def send_line_notify(message):
     url = "https://api.line.me/v2/bot/message/push"
@@ -153,3 +155,76 @@ class IndexView(View):
             return render(request, 'events/osaka.html', context={
                 'my_form': my_form,
             })
+
+class IndexAPIView(View):
+
+    def get(self, request, *args, **kwargs):
+        """本日のイベントを取得"""
+        today = timezone.now().date()
+        timestamp = str(int(time.time()))
+
+        events_data = {
+            'date': '本日',
+            'bears_events': list(Bears.objects.filter(date=today).values()),
+            'sengoku_events': list(Sengoku.objects.filter(date=today).values()),
+            'helluva_events': list(Helluva.objects.filter(date=today).values()),
+            'fuzz_events': list(Fuzz.objects.filter(date=today).values()),
+            'mele_events': list(Mele.objects.filter(date=today).values()),
+            'socore_events': list(Socore.objects.filter(date=today).values()),
+            'tora_events': list(Tora.objects.filter(date=today).values()),
+            'hokage_events': list(Hokage.objects.filter(date=today).values()),
+            'king_events': list(King.objects.filter(date=today).values()),
+            'fandango_events': list(Fandango.objects.filter(date=today).values()),
+            'anarky_events': list(Anarky.objects.filter(date=today).values()),
+            'stomp_events': list(Stomp.objects.filter(date=today).values()),
+            'timestamp': timestamp,
+        }
+
+        response = JsonResponse(events_data, safe=False)
+        response["Access-Control-Allow-Origin"] = "*"  # CORS許可
+        response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+        response["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+
+    def post(self, request, *args, **kwargs):
+        """指定された日付のイベントを取得"""
+        try:
+            data = json.loads(request.body)  # JSONリクエストをパース
+            selected_date = data.get('date')  # 選択された日付
+
+            if not selected_date:
+                return JsonResponse({"error": "日付が指定されていません"}, status=400)
+
+            selected_date = dt_date.fromisoformat(selected_date)  # YYYY-MM-DD の形式に変換
+            today = dt_date.today()
+            timestamp = str(int(time.time()))
+
+            date_display = "本日" if selected_date == today else str(selected_date)
+
+            events_data = {
+                'date': date_display,
+                'bears_events': list(Bears.objects.filter(date=selected_date).values()),
+                'sengoku_events': list(Sengoku.objects.filter(date=selected_date).values()),
+                'helluva_events': list(Helluva.objects.filter(date=selected_date).values()),
+                'fuzz_events': list(Fuzz.objects.filter(date=selected_date).values()),
+                'mele_events': list(Mele.objects.filter(date=selected_date).values()),
+                'socore_events': list(Socore.objects.filter(date=selected_date).values()),
+                'tora_events': list(Tora.objects.filter(date=selected_date).values()),
+                'hokage_events': list(Hokage.objects.filter(date=selected_date).values()),
+                'king_events': list(King.objects.filter(date=selected_date).values()),
+                'fandango_events': list(Fandango.objects.filter(date=selected_date).values()),
+                'anarky_events': list(Anarky.objects.filter(date=selected_date).values()),
+                'stomp_events': list(Stomp.objects.filter(date=selected_date).values()),
+                'timestamp': timestamp,
+            }
+
+            response = JsonResponse(events_data, safe=False)
+            response["Access-Control-Allow-Origin"] = "*"
+            response["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+            response["Access-Control-Allow-Headers"] = "Content-Type"
+            return response
+
+        except Exception as e:
+            response = JsonResponse({"error": f"データ取得に失敗しました: {str(e)}"}, status=500)
+            response["Access-Control-Allow-Origin"] = "*"
+            return response
