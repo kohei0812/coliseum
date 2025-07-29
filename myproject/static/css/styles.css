@@ -142,9 +142,18 @@ main .hero {
   width: 100%;
   aspect-ratio: 1920/600;
 }
-main .hero img {
+main .hero-slider {
+  width: 100%;
+}
+main .hero-slider__item {
+  height: 100%;
+}
+main .hero-slider__item img {
   -o-object-fit: cover;
      object-fit: cover;
+}
+main .hero-slider .slick-arrow {
+  display: none !important;
 }
 main .livehouse {
   margin-top: 20px;

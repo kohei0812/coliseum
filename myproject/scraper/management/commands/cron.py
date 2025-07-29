@@ -1,7 +1,4 @@
 from django.core.management.base import BaseCommand
-from myproject.scraper.scrapes.osaka.bears_scraper import bears_scraper
-from myproject.scraper.scrapes.osaka.sengoku_scraper import sengoku_scraper
-from myproject.scraper.scrapes.osaka.helluva_scraper import helluva_scraper
 import importlib
 from django.http import HttpResponse
 import traceback
@@ -38,10 +35,10 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         try:
             for module_name in [
-                "bears_scraper", "sengoku_scraper", "helluva_scraper", "fuzz_scraper", 
-                "mele_scraper", "socore_scraper", "tora_scraper", "hokage_scraper", 
-                "king_scraper", "fandango_scraper"]:
-                module = importlib.import_module(f'.scrapes.osaka.{module_name}', __package__)
+                "hardrain_scraper",
+            "paradice_scraper","bears_scraper", "sengoku_scraper", "helluva_scraper", "fuzz_scraper", 
+            "mele_scraper", "socore_scraper", "tora_scraper", "hokage_scraper","fandango_scraper"]:
+                module = importlib.import_module(f'scraper.scrapes.osaka.{module_name}')
                 getattr(module, module_name)()
 
             # Successful scraping
@@ -49,7 +46,7 @@ class Command(BaseCommand):
             send_line_notify(success_message)
 
             print(success_message)
-            return HttpResponse("Scraping completed!")
+            print("Scraping completed!")  # または self.stdout.write("Scraping completed!")
 
         except Exception as e:
             # エラーメッセージとトレースバックを取得
@@ -65,8 +62,6 @@ class Command(BaseCommand):
             send_line_notify(line_message)
 
             # エラーが発生した場合、通知用のレスポンスを返す
-            return JsonResponse({
-                "message": "An error occurred during scraping.",
-                "error": error_message,
-                "traceback": stack_trace
-            }, status=500)
+            self.stderr.write("An error occurred during scraping.")
+            self.stderr.write(error_message)
+            self.stderr.write(stack_trace)

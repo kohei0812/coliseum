@@ -1,5 +1,4 @@
-{% load static %}
-{% load i18n %}
+{% load static %} {% load i18n %}
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -12,13 +11,19 @@
     />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    <meta name="description" content="Rock'n'Roll Colisuemは全国のライブ情報を一覧で提供するサイトです。" />
+    <meta
+      name="description"
+      content="Rock'n'Roll Colisuemは全国のライブ情報を一覧で提供するサイトです。"
+    />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@otherguy0721" />
     <meta name="twitter:title" content="Rock'n'Roll Colisuem" />
-    <meta name="twitter:description" content="Rock'n'Roll Colisuemは全国のライブ情報を一覧で提供するサイトです。" />
+    <meta
+      name="twitter:description"
+      content="Rock'n'Roll Colisuemは全国のライブ情報を一覧で提供するサイトです。"
+    />
     <meta name="twitter:image" content="{% static 'img/osaka.jpg' %}" />
-    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}" />
     <title>{% block title %}Rock'n'Roll Colisuem{% endblock %}</title>
     <script
       src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -29,7 +34,27 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
     <!-- CSSの読み込み -->
+    <!-- slickのCSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.css"
+    />
+    <!-- slickのJavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   </head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z345D109SK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-Z345D109SK');
+  </script>
   <body>
     <!-- <div class="sp-nav_wrapper">
       <nav class="sp-nav sp_only">
@@ -41,11 +66,11 @@
     <form action="{% url 'set_language' %}" method="post" class="chlang">
       {% csrf_token %}
       <select name="language">
-          <option value="en">English</option>
-          <option value="ja">日本語</option>
+        <option value="en">English</option>
+        <option value="ja">日本語</option>
       </select>
       <button type="submit">{% trans "Change Language" %}</button>
-  </form>
+    </form>
     <button class="hamburger-menu sp_only" id="js-hamburger-menu">
       <span class="hamburger-menu__bar"></span>
       <span class="hamburger-menu__bar"></span>
@@ -66,10 +91,12 @@
         </div>
         <nav class="pc_only">
           <ul>
-            <li><a href="/">
-              <!-- 関西 -->
-              {% trans "Kansai" %}
-            </a></li>
+            <li>
+              <a href="/">
+                <!-- 関西 -->
+                {% trans "Kansai" %}
+              </a>
+            </li>
           </ul>
         </nav>
       </div>

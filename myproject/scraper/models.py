@@ -106,6 +106,7 @@ class Tora(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     image = models.ImageField(upload_to=get_image_upload_tora, blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
     
     def __str__(self):
         return self.title
@@ -186,6 +187,38 @@ class Stomp(models.Model):
     content = models.TextField()
     performers = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to=get_image_upload_stomp, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+
+def get_image_upload_paradice(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/paradice/{filename}"
+
+class Paradice(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True) 
+    image = models.ImageField(upload_to=get_image_upload_paradice, blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+def get_image_upload_hardrain(instance, filename):
+    # 現在の年と次の月を取得
+    year = datetime.datetime.now().year
+    next_month = (datetime.datetime.now().month % 12) + 1
+    return f"{year}/{next_month}/hardrain/{filename}"
+
+class Hardrain(models.Model):
+    date = models.DateField()
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    performers = models.TextField(blank=True, null=True) 
+    image = models.ImageField(upload_to=get_image_upload_hardrain, blank=True, null=True)
     
     def __str__(self):
         return self.title

@@ -26,8 +26,8 @@
                 <td>{{ event.performers|linebreaks }}</td>
                 <td>{{ event.content|linebreaks }}</td>
                 <td>
-                    {% if event.image %}
-                        <img src="{{ event.image.url }}" alt="{{ event.title }}" width="100">
+                    {% if event.image_url %}
+                        <img src="{{ event.image_url }}" alt="{{ event.title }}" width="100">
                     {% else %}
                         画像なし
                     {% endif %}

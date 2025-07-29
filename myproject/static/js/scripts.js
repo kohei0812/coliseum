@@ -26,4 +26,10 @@ $(document).ready(function () {
     $(".sp-nav").toggleClass("active");
     $(".hamburger-menu").toggleClass("hamburger-menu--open");
   });
+
+
+  $('#top-slider').slick({
+    autoplay: true,
+    autoplaySpeed: 5000,
+  });
 });

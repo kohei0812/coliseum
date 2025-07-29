@@ -5,7 +5,14 @@
 {% load i18n %}
 
 <div class="hero">
-    <img src="{% static 'img/osaka.jpg' %}" alt="そうだ、ライブ行こう">
+    <ul class="hero-slider" id="top-slider">
+        <li class="hero-slider__item">
+            <img src="{% static 'img/slider_1.jpg' %}" alt="広告募集">
+        </li>
+        <li class="hero-slider__item">
+            <img src="{% static 'img/slider_2.jpg' %}" alt="掲載例">
+        </li>
+    </ul>
 </div>
 {% endblock %}
 {% block content %}
@@ -53,6 +60,12 @@
             </li>
             <li class="livehouse_list-item">
                 Club Stomp
+            </li>
+            <li class="livehouse_list-item">
+                Paradice
+            </li>
+            <li class="livehouse_list-item">
+                HARD RAIN
             </li>
         </ul>
     </div>
@@ -147,11 +160,10 @@
             {% for tora_event in tora_events %}
             <li class="event-list_child">
             <h3 class="event-list-ttl">{{tora_event.title}}</h3>
-            <div class="event-list-performers">{{tora_event.performers |linebreaks}}</div>
             <div class="event-list-content">{{tora_event.content |linebreaks}}</div>
             <div class="event-list-img"> 
-                {% if tora_event.image %}
-                <img src="{{ tora_event.image.url }}" alt="{{ tora_event.title }}" width="500">
+                {% if tora_event.image_url %}
+                <img src="{{ tora_event.image_url }}" alt="{{ tora_event.title }}" width="500">
                 {% endif %}
             </div>
             </li>
@@ -318,6 +330,45 @@
             <div class="event-list-img"> 
                 {% if bears_event.image %}
                 <img src="{{ bears_event.image.url }}" alt="{{ bears_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if paradice_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">Paracdice</h2>
+            <a href="https://para-dice.net/" target="_blank">https://para-dice.net/</a>
+            <ul class="event-list_body">
+            {% for paradice_event in paradice_events %}
+            <li class="event-list_child">
+            <h3 class="event-list-ttl">{{paradice_event.title}}</h3>
+            <div class="event-list-content">{{paradice_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if paradice_event.image %}
+                <img src="{{ paradice_event.image.url }}" alt="{{ paradice_event.title }}" width="500">
+                {% endif %}
+            </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </li>
+        {% endif %}
+        {% if hardrain_events %}
+        <li class="event-list_item">
+            <h2 class="event-list_h2">HARD RAIN</h2>
+            <a href="http://hardrain-web.net/top.html" target="_blank">http://hardrain-web.net/top.html</a>
+            <ul class="event-list_body">
+            {% for hardrain_event in hardrain_events %}
+            <li class="event-list_child">
+            <h3 class="event-list-ttl">{{hardrain_event.title}}</h3>
+             <div class="event-list-performers">{{hardrain_event.performers |linebreaks}}</div>
+            <div class="event-list-content">{{hardrain_event.content |linebreaks}}</div>
+            <div class="event-list-img"> 
+                {% if hardrain_event.image %}
+                <img src="{{ hardrain_event.image.url }}" alt="{{ hardrain_event.title }}" width="500">
                 {% endif %}
             </div>
             </li>

@@ -111,9 +111,19 @@ img{
         .hero{
             width: 100%;
             aspect-ratio:1920/600 ;
-            img{
-                object-fit: cover;
+            &-slider{
+                width: 100%;
+                &__item{
+                    height: 100%;
+                    img{
+                        object-fit: cover;
+                    }
+                }
+                .slick-arrow{
+                    display: none !important;
+                }
             }
+           
         }
         .livehouse{
             margin-top:20px;

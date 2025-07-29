@@ -1,107 +1,72 @@
-import os
-import re
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from django.core.files.base import ContentFile
-from urllib.parse import urljoin
-from ...models import Tora  # Adjust to your actual model name
-
-def extract_event_date(date_text):
-    # Matches date format as YYYY MM/DD (e.g., 2024 11/01)
-    match = re.search(r'(\d{4})\s(\d{1,2})/(\d{1,2})', date_text)
-    if match:
-        year, month, day = map(int, match.groups())
-        return datetime(year, month, day)  # Use extracted year, month, and day
-    return None
-
-def save_image(image_url, event_title, max_length=50):
-    """Download and save an image from a URL with a filename length restriction."""
-    try:
-        response = requests.get(image_url, stream=True)
-        response.raise_for_status()
-        ext = image_url.split('.')[-1]
-        file_name = f"{event_title.replace(' ', '_')[:max_length]}.{ext}"
-        return ContentFile(response.content), file_name
-    except Exception as e:
-        print(f"Error fetching image from {image_url}: {e}")
-    return None, None
+from ...models import Tora  # あなたのモデルに合わせて調整
 
 def tora_scraper():
-    print("------------tora start----------------")
-    url = "https://live-tora.com/live-schedule-next-month"
+    print("------------tora api start----------------")
     
-    # Fetch the HTML page
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    posts = soup.find_all('div', class_='getPost')
+    API_URL = "https://live-tora.com/wp-json/wp/v2/posts"
+    today = datetime.today().date()
+    page = 1
 
-    if not posts:
-        print("No events found on the page")
-        return
+    while True:
+        # 投稿一覧を _embed 付きで取得（画像情報を含める）
+        response = requests.get(
+            f"{API_URL}?per_page=100&page={page}&_embed&_fields=id,date,title,content,_embedded"
+        )
 
-    for post in posts:
-        # Extract date from the link text
-        link = post.find('h4', class_='getPostTitle').find('a')
-        if link:
-            date_text = link.get_text(strip=True)
-            event_date = extract_event_date(date_text)
+        if response.status_code != 200:
+            print(f"API error: {response.status_code}")
+            break
 
-            if event_date is None:
-                print(f"No valid date found for event: {date_text}")
-                continue  # Skip event if date is not valid
+        posts = response.json()
+        if not posts:
+            break  # データがなければ終了
 
-            # Extract title (removing the date part)
-            title = None
-
-            # Check if the date_text contains the brackets
-            if '［' in date_text and '］' in date_text:
-                try:
-                    title = date_text.split('［')[1].split('］')[0].strip()  # Extract title from brackets
-                except IndexError:
-                    print(f"Error extracting title from {date_text}: brackets format incorrect")
-                    continue  # Skip event if title extraction fails
-            else:
-                # Handle cases where brackets are not found, or use a fallback method
-                title = date_text.strip()
-
-            # Extract content from getPostContent
-            content_div = post.find("div", class_="getPostContent")
-            content = content_div.get_text(separator="\n", strip=True) if content_div else "No Content"
-
-            # Remove unnecessary spaces
-            content = content.replace(" ", "\n")
-
-            # Extract image URL
-            img_tag = post.find('img')
-            image_url = img_tag['src'] if img_tag and 'src' in img_tag.attrs else None
-
+        for post in posts:
             try:
-                # Save or update the event in the database
+                # イベント日付（datetime型 → date型）
+                event_date = datetime.fromisoformat(post["date"]).date()
+                if event_date <= today:
+                    continue  # 過去の日付はスキップ
+
+                # タイトル
+                title = post["title"]["rendered"].strip()
+
+                # 本文（HTMLをプレーンテキストに変換）
+                content_html = post["content"]["rendered"]
+                soup = BeautifulSoup(content_html, "html.parser")
+                content = soup.get_text(separator="\n", strip=True)
+
+                # アイキャッチ画像のURL取得（_embedded経由）
+                image_url = None
+                embedded = post.get("_embedded", {})
+                media = embedded.get("wp:featuredmedia", [])
+                if media:
+                    image_url = media[0].get("source_url")
+                else:
+                    # fallback: 本文内の画像を使う
+                    img_tag = soup.find("img")
+                    if img_tag and img_tag.get("src"):
+                        image_url = img_tag["src"]
+                    else:
+                        print(f"No featured image or inline image for post ID {post['id']}")
+                # 保存（imageはURLとして保存する前提。Djangoモデルで image_url フィールドを使ってください）
                 event, created = Tora.objects.update_or_create(
                     date=event_date,
                     defaults={
-                        'title': title,
-                        'content': content,
-                        # 'performers' is removed from defaults
+                        "title": title,
+                        "content": content,
+                        "image_url": image_url,  # URLFieldを使用すること
                     }
                 )
 
-                # Save the image if the event is new or has no image
-                if created or not event.image:
-                    if image_url:
-                        # Convert relative URL to absolute
-                        image_url = urljoin(url, image_url)
-                        image_content, image_name = save_image(image_url, title)
-                        if image_content:
-                            event.image.save(image_name, image_content)
-                            print(f"Image saved for event '{title}'")
+                print(f"{'Created' if created else 'Updated'}: {title} ({event_date})")
 
-                if created:
-                    print(f"Event '{title}' created successfully")
-                else:
-                    print(f"Event '{title}' updated successfully")
             except Exception as e:
-                print(f"Error saving event '{title}': {e}")
+                print(f"Error processing post: {e}")
 
-    print("------------tora end----------------")
+        page += 1  # 次のページへ
+
+    print("------------tora api end----------------")

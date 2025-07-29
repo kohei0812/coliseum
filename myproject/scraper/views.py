@@ -5,14 +5,17 @@ from django.views.generic.base import (
 from django.utils import timezone
 from django.http import HttpResponse
 import importlib
-from .models import Bears,Sengoku,Helluva,Fuzz,Mele,Socore,Tora,Hokage,King,Fandango,Anarky,Stomp
+from .models import Bears,Sengoku,Helluva,Fuzz,Mele,Socore,Tora,Hokage,King,Fandango,Anarky,Stomp,Paradice,Hardrain
 from .forms import MyForm
 from datetime import date as dt_date
 import traceback
 import requests
-from django.http import JsonResponse
+from django.http import JsonResponse, JsonResponse
 import time
 import json
+import sys
+import io
+
 
 # LINE Messaging APIに通知を送るための関数
 def send_line_notify(message):
@@ -39,24 +42,31 @@ def send_line_notify(message):
     return response.status_code
 
 def scrape_view(request):
+    output_buffer = io.StringIO()  # 標準出力をキャプチャするバッファ
+    sys.stdout = output_buffer  # 標準出力をリダイレクト
     try:
         for module_name in [
-            "bears_scraper", "sengoku_scraper", "helluva_scraper", "fuzz_scraper", 
-            "mele_scraper", "socore_scraper", "tora_scraper", "hokage_scraper", 
-            "king_scraper", "fandango_scraper"]:
+             "tora_scraper",
+            "paradice_scraper","bears_scraper", "sengoku_scraper", "helluva_scraper", "fuzz_scraper", 
+            "mele_scraper", "socore_scraper", "hokage_scraper","fandango_scraper","hardrain_scraper",
+            ]:
             module = importlib.import_module(f'.scrapes.osaka.{module_name}', __package__)
             getattr(module, module_name)()
         print("Scraping executed")
-        return HttpResponse("Scraping completed!")
+        sys.stdout = sys.__stdout__
+        return HttpResponse(f"Scraping completed!\n\nOutput:\n{output_buffer.getvalue()}", content_type="text/plain")
+    
     except Exception as e:
+        sys.stdout = sys.__stdout__  # 標準出力を元に戻す
         # エラーメッセージとトレースバックを取得
         error_message = f"An error occurred: {str(e)}"
         stack_trace = traceback.format_exc()  # エラートレースバックを取得
 
-        # エラーメッセージとトレースバックをコンソールに出力
-        print(f"Error: {error_message}")
-        print(f"Traceback:\n{stack_trace}")
+         # エラーメッセージとトレースバックを取得し、キャプチャした出力と共に表示
+        error_output = output_buffer.getvalue()
+        full_error_message = f"Scraping failed.\n\nOutput:\n{error_output}\n\nError: {error_message}\nTraceback:\n{stack_trace}"
 
+        print(full_error_message)  # エラーをログに出力
         # LINEに通知
         line_message = f"Error in scrape_view:\n{error_message}\n\n{stack_trace}"
         send_line_notify(line_message)
@@ -70,7 +80,7 @@ def scrape_view(request):
         
 def event_list(request):
     # データベースから全イベントを取得
-    events = Fandango.objects.all().order_by('date')  # 日付順にソート
+    events = Tora.objects.all().order_by('date')  # 日付順にソート
     return render(request, 'events/event_list.html', {'events': events})
 
 class IndexView(View):
@@ -93,6 +103,8 @@ class IndexView(View):
         fandango_events = Fandango.objects.filter(date=today)
         anarky_events = Anarky.objects.filter(date=today)
         stomp_events = Stomp.objects.filter(date=today)
+        paradice_events = Paradice.objects.filter(date=today)
+        hardrain_events = Hardrain.objects.filter(date=today)
         return render(request,'events/osaka.html',context={
             'date':'本日',
             'my_form':my_form,
@@ -108,6 +120,8 @@ class IndexView(View):
             'fandango_events':fandango_events,
             'anarky_events':anarky_events,
             'stomp_events':stomp_events,
+            'paradice_events':paradice_events,
+            'hardrain_events':hardrain_events,
             'timestamp': timestamp,
         })
     
@@ -134,6 +148,8 @@ class IndexView(View):
             fandango_events = Fandango.objects.filter(date=date)
             anarky_events = Anarky.objects.filter(date=date)
             stomp_events = Stomp.objects.filter(date=date)
+            paradice_events = Paradice.objects.filter(date=date)
+            hardrain_events = Hardrain.objects.filter(date=date)
             return render(request,'events/osaka.html',context={
                 'date':date_display,
                 'my_form':my_form,
@@ -149,6 +165,8 @@ class IndexView(View):
                 'fandango_events':fandango_events,
                 'anarky_events':anarky_events,
                 'stomp_events':stomp_events,
+                'paradice_events':paradice_events,
+                'hardrain_events':hardrain_events,
                 'timestamp': timestamp,
             })
         else:
@@ -177,6 +195,8 @@ class IndexAPIView(View):
             'fandango_events': list(Fandango.objects.filter(date=today).values()),
             'anarky_events': list(Anarky.objects.filter(date=today).values()),
             'stomp_events': list(Stomp.objects.filter(date=today).values()),
+            'paradice_events': list(Paradice.objects.filter(date=today).values()),
+            'hardrain_events': list(Hardrain.objects.filter(date=today).values()),
             'timestamp': timestamp,
         }
 
@@ -215,6 +235,8 @@ class IndexAPIView(View):
                 'fandango_events': list(Fandango.objects.filter(date=selected_date).values()),
                 'anarky_events': list(Anarky.objects.filter(date=selected_date).values()),
                 'stomp_events': list(Stomp.objects.filter(date=selected_date).values()),
+                'paradice_events': list(Paradice.objects.filter(date=selected_date).values()),
+                'hardrain_events': list(Hardrain.objects.filter(date=selected_date).values()),
                 'timestamp': timestamp,
             }
 
